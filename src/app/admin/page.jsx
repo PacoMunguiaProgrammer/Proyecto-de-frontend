@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,13 +9,14 @@ const AdminPage = () => {
     const router = useRouter();
     const [usuarios, setUsuarios] = useState([]);
     const [admins, setAdmins] = useState([]);
+    const [tipoUsuario, setTipoUsuario] = useState("usuario"); // Estado para el select
 
     useEffect(() => {
         const cargarDatos = async () => {
             try {
                 const data = await obtenerUsuariosYAdmins();
                 console.log("Datos recibidos:", data);
-                
+
                 if (Array.isArray(data)) {
                     setUsuarios(data.filter((u) => u.tipoUsuario === "usuario"));
                     setAdmins(data.filter((u) => u.tipoUsuario === "admin"));
@@ -61,7 +62,22 @@ const AdminPage = () => {
         <div className="container mt-5">
             <h1 className="mb-4">Panel de Administración</h1>
             <div className="mb-3">
-                <button className="btn btn-primary me-2" onClick={() => router.push("/registro")}>Registrar Usuario</button>
+              <select
+    className="form-select mb-2"
+    value={tipoUsuario}
+    onChange={(e) => {
+        console.log("Nuevo valor seleccionado:", e.target.value);
+        setTipoUsuario(e.target.value);
+    }}
+>
+    <option value="usuario">Usuario</option>
+    <option value="admin">Administrador</option>
+</select>
+
+
+                <button className="btn btn-primary me-2" onClick={() => router.push(`/registro?tipo=${tipoUsuario}`)}>
+                    Registrar {tipoUsuario === "admin" ? "Administrador" : "Usuario"}
+                </button>
                 <button className="btn btn-secondary me-2" onClick={handleLogout}>Cerrar Sesión</button>
                 <button className="btn btn-secondary" onClick={() => router.push("/")}>Inicio</button>
             </div>

@@ -96,26 +96,33 @@ export const actualizarUsuarioAdmin = async (id, usuario) => {
 // Actualizar un usuario regular
 export const actualizarUsuario = async (id, usuario) => {
     try {
-        console.log("Actualizando usuario:", id, usuario);
         const response = await axios.put(`${API}/usuarios/${id}`, usuario, {
             headers: {
                 'Content-Type': 'application/json'
             },
             withCredentials: true
         });
-
         return response.data;
     } catch (error) {
-        if (error.response) {
-            console.error("Error en la respuesta de la API:", error.response.data);
-            throw new Error(`Error al actualizar usuario: ${error.response.statusText}`);
-        } else if (error.request) {
-            console.error("No se recibió respuesta de la API:", error.request);
-            throw new Error("Error al actualizar usuario: No se recibió respuesta de la API");
-        } else {
-            console.error("Error al configurar la solicitud:", error.message);
-            throw new Error(`Error al actualizar usuario: ${error.message}`);
-        }
+        console.error("Error al actualizar usuario:", error);
+        throw error;
+    }
+};
+
+export const actualizarUsuarios = async (id, usuario) => {
+    try {
+        // Solo extraemos email y password para evitar enviar otros datos no permitidos
+        const { email, password } = usuario;
+        const response = await axios.put(`${API}/usuarios/${id}`, { email, password }, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error al actualizar usuario:", error);
+        throw error;
     }
 };
 
@@ -129,6 +136,19 @@ export const borrarUsuario = async (id) => {
         return { mensaje: "Error al borrar usuario" };
     }
 };
+
+export const borrarUsuarios = async (id) => {
+    try {
+        const response = await axios.delete(`${API}/usuarios/${id}`, {
+            withCredentials: true
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+        throw error;
+    }
+};
+
 export const cerrarSesion = async () => {
     try {
         const response = await fetch('/api/salir', {

@@ -48,24 +48,27 @@ const EditarUsuario = () => {
     };
 
     return (
-        <div>
-            <h1>Editar Usuario</h1>
+        <div className="container mt-5">
+            <h1 className="mb-4">Editar Usuario</h1>
             <form onSubmit={handleSubmit}>
-                <label>Email:</label>
-                <input type="email" name="email" value={usuario.email} onChange={handleChange} required />
-
-                <label>Contraseña:</label>
-                <input type="password" name="password" value={usuario.password} onChange={handleChange} required />
-
-                <label>Tipo de Usuario:</label>
-                <select name="tipoUsuario" value={usuario.tipoUsuario} onChange={handleChange} required>
-                    <option value="usuario">Usuario</option>
-                    <option value="admin">Admin</option>
-                </select>
-
-                <button type="submit">Actualizar</button>
+                <div className="mb-3">
+                    <label className="form-label">Email:</label>
+                    <input type="email" name="email" className="form-control" value={usuario.email} onChange={handleChange} required />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Contraseña:</label>
+                    <input type="password" name="password" className="form-control" value={usuario.password} onChange={handleChange} required />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Tipo de Usuario:</label>
+                    <select name="tipoUsuario" className="form-select" value={usuario.tipoUsuario} onChange={handleChange} required>
+                        <option value="usuario">Usuario</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" className="btn btn-primary">Actualizar</button>
+                <button type="button" className="btn btn-secondary ms-2" onClick={() => router.push("/admin")}>Cancelar</button>
             </form>
-            <button onClick={() => router.push("/admin")}>Cancelar</button>
         </div>
     );
 };

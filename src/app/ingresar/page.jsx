@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { login } from "@/api/peticiones";
 import { useRouter } from "next/navigation";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Login() {
     const { register, handleSubmit } = useForm();
@@ -27,16 +28,24 @@ export default function Login() {
     };
 
     return (
-        <>
-            <h1>Iniciar Sesión</h1>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+        <div className="container mt-5">
+            <h1 className="mb-4">Iniciar Sesión</h1>
+            {error && <p className="text-danger">{error}</p>}
             <form onSubmit={handleSubmit(onSubmit)}>
-                <input type="text" placeholder="Usuario" {...register("username")} required /><br/><br/>
-                <input type="password" placeholder="Contraseña" {...register("password")} required /><br/><br/>
-                <button type="submit">Ingresar</button>
+                <div className="mb-3">
+                    <label className="form-label">Usuario</label>
+                    <input type="text" className="form-control" placeholder="Usuario" {...register("username")} required />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Contraseña</label>
+                    <input type="password" className="form-control" placeholder="Contraseña" {...register("password")} required />
+                </div>
+                <button type="submit" className="btn btn-primary">Ingresar</button>
             </form>
-            <button onClick={() => router.push("/registro")}>Registrar Usuario</button>
-            <button onClick={() => router.push("/")}>Inicio</button>
-        </>
+            <div className="mt-3">
+                <button className="btn btn-secondary me-2" onClick={() => router.push("/registro")}>Registrar Usuario</button>
+                <button className="btn btn-secondary" onClick={() => router.push("/")}>Inicio</button>
+            </div>
+        </div>
     );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { obtenerUsuariosYAdmins, borrarUsuario } from "@/api/peticiones";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AdminPage = () => {
     const router = useRouter();
@@ -57,15 +58,17 @@ const AdminPage = () => {
     };
 
     return (
-        <div>
-            <h1>Panel de Administración</h1>
-            <button onClick={() => router.push("/registro")}>Registrar Usuario</button>
-            <button onClick={handleLogout}>Cerrar Sesión</button>
-            <button onClick={() => router.push("/")}>Inicio</button>
+        <div className="container mt-5">
+            <h1 className="mb-4">Panel de Administración</h1>
+            <div className="mb-3">
+                <button className="btn btn-primary me-2" onClick={() => router.push("/registro")}>Registrar Usuario</button>
+                <button className="btn btn-secondary me-2" onClick={handleLogout}>Cerrar Sesión</button>
+                <button className="btn btn-secondary" onClick={() => router.push("/")}>Inicio</button>
+            </div>
 
             <h2>Usuarios</h2>
             {usuarios.length > 0 ? (
-                <table border="1">
+                <table className="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -81,8 +84,8 @@ const AdminPage = () => {
                                 <td>{usuario.username}</td>
                                 <td>{usuario.email}</td>
                                 <td>
-                                    <button onClick={() => editarUsuario(usuario._id)}>Editar</button>
-                                    <button onClick={() => eliminarUsuario(usuario._id)}>Eliminar</button>
+                                    <button className="btn btn-warning me-2" onClick={() => editarUsuario(usuario._id)}>Editar</button>
+                                    <button className="btn btn-danger" onClick={() => eliminarUsuario(usuario._id)}>Eliminar</button>
                                 </td>
                             </tr>
                         ))}
@@ -94,7 +97,7 @@ const AdminPage = () => {
 
             <h2>Administradores</h2>
             {admins.length > 0 ? (
-                <table border="1">
+                <table className="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -110,7 +113,7 @@ const AdminPage = () => {
                                 <td>{admin.username}</td>
                                 <td>{admin.email}</td>
                                 <td>
-                                    <button onClick={() => editarUsuario(admin._id)}>Editar</button>
+                                    <button className="btn btn-warning" onClick={() => editarUsuario(admin._id)}>Editar</button>
                                 </td>
                             </tr>
                         ))}

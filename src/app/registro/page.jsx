@@ -1,12 +1,14 @@
-"use client";
+'use client';
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { peticionRegistro } from "@/api/peticiones";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Registro() {
     const { register, handleSubmit } = useForm();
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
     return (
         <>
@@ -15,7 +17,7 @@ export default function Registro() {
               onSubmit={handleSubmit(async (usuario) => {
                 console.log("Datos del formulario:", usuario); // Verifica que el campo sea "tipoUsuario"
                 await peticionRegistro(usuario);
-                redirect("/ingresar");
+                router.push("/ingresar");
             })}
             >
                 <input type="text" placeholder="Usuario" {...register("username")} required /><br/><br/>
@@ -42,13 +44,15 @@ export default function Registro() {
                 {/* Select para elegir tipo de usuario */}
                 <label>Tipo de Usuario:</label>
                 <select {...register("tipoUsuario")}> {/* Asegúrate de que el nombre sea "tipoUsuario" */}
-    <option value="usuario">Usuario</option>
-    <option value="admin">Administrador</option>
-</select>
+                    <option value="usuario">Usuario</option>
+                    <option value="admin">Administrador</option>
+                </select>
                 <br/><br/>
 
                 <button type="submit">Registrar usuario</button>
             </form>
+            <button onClick={() => router.push("/ingresar")}>Iniciar sesion</button>
+            <button onClick={() => router.push("/")}>Inicio</button>
         </>
     );
 }

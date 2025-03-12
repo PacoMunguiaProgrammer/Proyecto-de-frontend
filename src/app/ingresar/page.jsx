@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { login } from "@/api/peticiones";
@@ -34,7 +35,8 @@ export default function Login() {
                 <input type="password" placeholder="Contraseña" {...register("password")} required /><br/><br/>
                 <button type="submit">Ingresar</button>
             </form>
+            <button onClick={() => router.push("/registro")}>Registrar Usuario</button>
+            <button onClick={() => router.push("/")}>Inicio</button>
         </>
     );
 }
-

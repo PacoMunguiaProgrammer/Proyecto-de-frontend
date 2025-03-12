@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { actualizarUsuarioAdmin, obtenerUsuariosYAdmins } from "../../../api/peticiones";
+import { actualizarUsuarioAdmin, actualizarUsuario, obtenerUsuariosYAdmins } from "@/api/peticiones";
 
 const EditarUsuario = () => {
     const router = useRouter();
@@ -12,8 +12,14 @@ const EditarUsuario = () => {
         const cargarUsuario = async () => {
             try {
                 const data = await obtenerUsuariosYAdmins();
-                const usuarioEncontrado = data.find((u) => u._id === id);
-                if (usuarioEncontrado) setUsuario(usuarioEncontrado);
+                console.log("Datos obtenidos:", data); // Agrega este console.log para ver los datos
+                if (data && typeof data === 'object') {
+                    const todosUsuarios = [...(data.usuarios || []), ...(data.admins || [])];
+                    const usuarioEncontrado = todosUsuarios.find((u) => u._id === id);
+                    if (usuarioEncontrado) setUsuario(usuarioEncontrado);
+                } else {
+                    console.error("Error: la respuesta no es un objeto esperado", data);
+                }
             } catch (error) {
                 console.error("Error al obtener usuario:", error);
             }
@@ -28,7 +34,11 @@ const EditarUsuario = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await actualizarUsuarioAdmin(id, usuario, "TOKEN_ADMIN"); // ⚠️ Usa el token real
+            if (usuario.tipoUsuario === "admin") {
+                await actualizarUsuarioAdmin(id, usuario); // Usa la función para actualizar admins
+            } else {
+                await actualizarUsuario(id, usuario); // Usa la función para actualizar usuarios
+            }
             alert("Usuario actualizado correctamente");
             router.push("/admin");
         } catch (error) {
@@ -61,7 +71,3 @@ const EditarUsuario = () => {
 };
 
 export default EditarUsuario;
-
-
-
-

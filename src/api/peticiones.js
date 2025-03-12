@@ -25,7 +25,6 @@ export const login = async (usuario) => {
     }
 };
 
-
 // ✅ Obtener todos los usuarios y admins
 export const obtenerUsuariosYAdmins = async () => {
     try {
@@ -43,7 +42,7 @@ export const obtenerUsuariosYAdmins = async () => {
 // Obtener un usuario por ID
 export const obtenerUsuarioPorId = async (id) => {
     try {
-        const response = await fetch(`/api/usuarios/${id}`);
+        const respuesta = await axios.put(`${API}/usuarios/${id}`, nuevosDatos, { headers: { Authorization: `Bearer ${token}` } });
         if (!response.ok) {
             throw new Error("Error al obtener usuario");
         }
@@ -68,26 +67,88 @@ export const actualizarPerfilUsuario = async (id, nuevosDatos, token) => {
     }
 };
 
-export async function actualizarUsuarioAdmin(id, datos) {
-    const res = await fetch(`/api/usuarios/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(datos),
-    });
-    if (!res.ok) throw new Error("Error al actualizar usuario");
-    return await res.json();
-}
-  
-  // 🔹 Borrar usuario
-  export const borrarUsuario = async (id) => {
+// Actualizar un usuario admin
+export const actualizarUsuarioAdmin = async (id, usuario) => {
     try {
-      const { data } = await axios.delete(`${API}/usuarios/admin/borrarUsuario/${id}`, { withCredentials: true });
-      return data;
+        console.log("Actualizando admin:", id, usuario);
+        const response = await axios.put(`${API}/admins/${id}`, usuario, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+
+        return response.data;
     } catch (error) {
-      console.error("Error al borrar usuario:", error);
-      return { mensaje: "Error al borrar usuario" };
+        if (error.response) {
+            console.error("Error en la respuesta de la API:", error.response.data);
+            throw new Error(`Error al actualizar admin: ${error.response.statusText}`);
+        } else if (error.request) {
+            console.error("No se recibió respuesta de la API:", error.request);
+            throw new Error("Error al actualizar admin: No se recibió respuesta de la API");
+        } else {
+            console.error("Error al configurar la solicitud:", error.message);
+            throw new Error(`Error al actualizar admin: ${error.message}`);
+        }
     }
-  };
+};
+
+// Actualizar un usuario regular
+export const actualizarUsuario = async (id, usuario) => {
+    try {
+        console.log("Actualizando usuario:", id, usuario);
+        const response = await axios.put(`${API}/usuarios/${id}`, usuario, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error("Error en la respuesta de la API:", error.response.data);
+            throw new Error(`Error al actualizar usuario: ${error.response.statusText}`);
+        } else if (error.request) {
+            console.error("No se recibió respuesta de la API:", error.request);
+            throw new Error("Error al actualizar usuario: No se recibió respuesta de la API");
+        } else {
+            console.error("Error al configurar la solicitud:", error.message);
+            throw new Error(`Error al actualizar usuario: ${error.message}`);
+        }
+    }
+};
+
+// 🔹 Borrar usuario
+export const borrarUsuario = async (id) => {
+    try {
+        const { data } = await axios.delete(`${API}/usuarios/admin/borrarUsuario/${id}`, { withCredentials: true });
+        return data;
+    } catch (error) {
+        console.error("Error al borrar usuario:", error);
+        return { mensaje: "Error al borrar usuario" };
+    }
+};
+export const cerrarSesion = async () => {
+    try {
+        const response = await fetch('/api/salir', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`Error en la respuesta de la API: ${data.mensaje}`);
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Error en cerrarSesion:", error);
+        throw error;
+    }
+};
   
 
 

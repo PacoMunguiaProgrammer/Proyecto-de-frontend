@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { obtenerUsuariosYAdmins, borrarUsuario } from "@/api/peticiones";
@@ -17,9 +18,11 @@ const AdminPage = () => {
                 if (Array.isArray(data)) {
                     setUsuarios(data.filter((u) => u.tipoUsuario === "usuario"));
                     setAdmins(data.filter((u) => u.tipoUsuario === "admin"));
-                } else {
+                } else if (data && typeof data === 'object') {
                     setUsuarios(data.usuarios || []);
                     setAdmins(data.admins || []);
+                } else {
+                    console.error("Error: la respuesta no es un array ni un objeto esperado", data);
                 }
             } catch (error) {
                 console.error("Error al obtener usuarios:", error);
@@ -48,9 +51,17 @@ const AdminPage = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        router.push("/ingresar");
+    };
+
     return (
         <div>
             <h1>Panel de Administración</h1>
+            <button onClick={() => router.push("/registro")}>Registrar Usuario</button>
+            <button onClick={handleLogout}>Cerrar Sesión</button>
+            <button onClick={() => router.push("/")}>Inicio</button>
 
             <h2>Usuarios</h2>
             {usuarios.length > 0 ? (

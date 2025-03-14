@@ -28,23 +28,25 @@ export default function Login() {
     };
 
     return (
-        <div className="container mt-5">
-            <h1 className="mb-4">Iniciar Sesión</h1>
-            {error && <p className="text-danger">{error}</p>}
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="mb-3">
-                    <label className="form-label">Usuario</label>
-                    <input type="text" className="form-control" placeholder="Usuario" {...register("username")} required />
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="card shadow-lg p-4" style={{ maxWidth: "400px", width: "100%" }}>
+                <h3 className="mb-3 text-center">Iniciar Sesión</h3>
+                {error && <p className="text-danger">{error}</p>}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="mb-3">
+                        <label className="form-label">Usuario</label>
+                        <input type="text" className="form-control" placeholder="Usuario" {...register("username")} required />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Contraseña</label>
+                        <input type="password" className="form-control" placeholder="Contraseña" {...register("password")} required />
+                    </div>
+                    <button type="submit" className="btn btn-warning w-100">Ingresar</button>
+                </form>
+                <div className="mt-3 d-grid gap-2">
+                    <button className="btn btn-danger" onClick={() => router.push("/registro")}>Registrar Usuario</button>
+                    <button className="btn btn-primary" onClick={() => router.push("/")}>Inicio</button>
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Contraseña</label>
-                    <input type="password" className="form-control" placeholder="Contraseña" {...register("password")} required />
-                </div>
-                <button type="submit" className="btn btn-primary">Ingresar</button>
-            </form>
-            <div className="mt-3">
-                <button className="btn btn-secondary me-2" onClick={() => router.push("/registro")}>Registrar Usuario</button>
-                <button className="btn btn-secondary" onClick={() => router.push("/")}>Inicio</button>
             </div>
         </div>
     );

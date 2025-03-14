@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { actualizarUsuarioAdmin, actualizarUsuario, obtenerUsuariosYAdmins } from "@/api/peticiones";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const EditarUsuario = () => {
     const router = useRouter();
@@ -48,27 +49,29 @@ const EditarUsuario = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <h1 className="mb-4">Editar Usuario</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Email:</label>
-                    <input type="email" name="email" className="form-control" value={usuario.email} onChange={handleChange} required />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Contraseña:</label>
-                    <input type="password" name="password" className="form-control" value={usuario.password} onChange={handleChange} required />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Tipo de Usuario:</label>
-                    <select name="tipoUsuario" className="form-select" value={usuario.tipoUsuario} onChange={handleChange} required>
-                        <option value="usuario">Usuario</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <button type="submit" className="btn btn-primary">Actualizar</button>
-                <button type="button" className="btn btn-secondary ms-2" onClick={() => router.push("/admin")}>Cancelar</button>
-            </form>
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="card shadow-lg p-4" style={{ maxWidth: "400px", width: "100%" }}>
+                <h3 className="mb-3 text-center">Editar Usuario</h3>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="form-label">Email:</label>
+                        <input type="email" name="email" className="form-control" value={usuario.email} onChange={handleChange} required />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Contraseña:</label>
+                        <input type="password" name="password" className="form-control" value={usuario.password} onChange={handleChange} required />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Tipo de Usuario:</label>
+                        <select name="tipoUsuario" className="form-select" value={usuario.tipoUsuario} onChange={handleChange} required>
+                            <option value="usuario">Usuario</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" className="btn btn-warning w-100">Actualizar</button>
+                    <button type="button" className="btn btn-danger w-100 mt-2" onClick={() => router.push("/admin")}>Cancelar</button>
+                </form>
+            </div>
         </div>
     );
 };

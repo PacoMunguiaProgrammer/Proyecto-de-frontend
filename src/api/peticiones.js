@@ -10,6 +10,7 @@ export const peticionRegistro = async (usuario) => {
 // ✅ Iniciar sesión
 export const login = async (usuario) => {
     try {
+        console.log("Enviando datos al backend:", usuario);
         const respuesta = await axios.post(`${API}/ingresar`, usuario, { withCredentials: true });
         console.log("Respuesta en el frontend:", respuesta.data);
 
@@ -21,9 +22,13 @@ export const login = async (usuario) => {
         };
     } catch (error) {
         console.error("Error en la petición de login:", error);
+        if (error.response) {
+            console.error("Detalles del error:", error.response.data);
+        }
         return { estado: false };
     }
 };
+
 
 // ✅ Obtener todos los usuarios y admins
 export const obtenerUsuariosYAdmins = async () => {
@@ -42,30 +47,20 @@ export const obtenerUsuariosYAdmins = async () => {
 // Obtener un usuario por ID
 export const obtenerUsuarioPorId = async (id) => {
     try {
-        const respuesta = await axios.put(`${API}/usuarios/${id}`, nuevosDatos, { headers: { Authorization: `Bearer ${token}` } });
-        if (!response.ok) {
-            throw new Error("Error al obtener usuario");
-        }
-        const data = await response.json();
-        return data;
+        console.log("Obteniendo usuario con ID:", id);
+
+        const respuesta = await axios.get(`${API}/usuario/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }, // Si usas autenticación
+            withCredentials: true
+        });
+
+        return respuesta.data; // `axios` ya convierte JSON automáticamente
     } catch (error) {
         console.error("Error en obtenerUsuarioPorId:", error);
         throw error;
     }
 };
 
-// Actualizar un usuario
-export const actualizarPerfilUsuario = async (id, nuevosDatos, token) => {
-    try {
-        const respuesta = await axios.put(`${API}/usuario/actualizarPerfil/${id}`, nuevosDatos, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        return respuesta.data;
-    } catch (error) {
-        console.error("Error al actualizar usuario:", error);
-        return null;
-    }
-};
 
 // Actualizar un usuario admin
 export const actualizarUsuarioAdmin = async (id, usuario) => {
@@ -109,27 +104,11 @@ export const actualizarUsuario = async (id, usuario) => {
     }
 };
 
-export const actualizarUsuarios = async (id, usuario) => {
-    try {
-        // Solo extraemos email y password para evitar enviar otros datos no permitidos
-        const { email, password } = usuario;
-        const response = await axios.put(`${API}/usuarios/${id}`, { email, password }, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error al actualizar usuario:", error);
-        throw error;
-    }
-};
 
 // 🔹 Borrar usuario
 export const borrarUsuario = async (id) => {
     try {
-        const { data } = await axios.delete(`${API}/usuarios/admin/borrarUsuario/${id}`, { withCredentials: true });
+        const { data } = await axios.delete(`${API}/usuarios/${id}`, { withCredentials: true });
         return data;
     } catch (error) {
         console.error("Error al borrar usuario:", error);
@@ -137,17 +116,6 @@ export const borrarUsuario = async (id) => {
     }
 };
 
-export const borrarUsuarios = async (id) => {
-    try {
-        const response = await axios.delete(`${API}/usuarios/${id}`, {
-            withCredentials: true
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar usuario:", error);
-        throw error;
-    }
-};
 
 export const cerrarSesion = async () => {
     try {
@@ -169,6 +137,5 @@ export const cerrarSesion = async () => {
         throw error;
     }
 };
-  
 
 
